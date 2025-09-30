@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\GroupController;
-
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CheckinController;
+use App\Models\User;
 
 
 /*
@@ -19,10 +19,16 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
-    return view('index');
+    $users = User::all(); // busca todos os usuários
+    return view('index', compact('users'));
 });
 
 Route::resource('groups', GroupController::class);
 
 Route::resource('users', UserController::class); //rota pra crud de users
+
+Route::resource('checkins', CheckinController::class)->only(['index', 'store']);
+
+// Route::get('/checkins', [CheckinController::class, 'index'])->name('checkins.index');
+// Route::post('/checkins', [CheckinController::class, 'store'])->name('checkins.store');
 
