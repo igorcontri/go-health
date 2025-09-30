@@ -21,9 +21,11 @@ class Group extends Model
         'owner_id',
     ];
 
-    /**
-     * um Grupo pertence a um Usuário (o dono).
-     */
+    public function streaks()
+    {
+        return $this->hasMany(\App\Models\Streak::class, 'group_id');
+    }
+    
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');

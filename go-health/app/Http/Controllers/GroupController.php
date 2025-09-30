@@ -63,17 +63,20 @@ class GroupController extends Controller
         }
     }
 
-    public function destroy(Group $group)
+    public function destroy($id)
     {
-        try {
-            $group->delete();
-            return redirect()->route('groups.index')
-                             ->with('sucesso', 'Grupo excluído com sucesso!');
-        } catch (\Exception $e) {
-            Log::error("ERRO AO EXCLUIR GRUPO: " . $e->getMessage());
-            return redirect()->route('groups.index')
-                             ->with('erro', 'Erro ao excluir o grupo.');
-        }
+        $group = Group::findOrFail($id);
+
+        // Remove vínculos com usuários
+        $group->members()->detach();
+
+        // Opcional: se quiser excluir streaks ligados a esse grupo
+        $group->streaks()->delete();
+
+        // Agora pode excluir o grupo
+        $group->delete();
+
+        return redirect()->route('groups.index')->with('sucesso', 'Grupo excluído com sucesso!');
     }
 
 
