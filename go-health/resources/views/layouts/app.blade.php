@@ -13,43 +13,26 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            {{-- Links principais --}}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">Início</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('groups.index') }}">Groups</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('users.index') }}">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('checkins.index') }}">Check-in</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('groups.index') }}">Groups</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Users</a></li>
             </ul>
 
-            {{-- Área de login/logout --}}
             <ul class="navbar-nav ms-auto">
-                @php
-                    $user = session('user'); // pega o usuário da sessão atual
-                @endphp
-
-                @if($user)
+                @php $sessionUser = Session::get('user'); @endphp
+                @if($sessionUser)
+                    <li class="nav-item"><span class="nav-link">Olá, {{ $sessionUser->name }}</span></li>
                     <li class="nav-item">
-                        <span class="nav-link">Olá, {{ $user->name }}</span>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{{ route('users.logout') }}" method="POST" class="d-inline">
+                        <form action="{{ route('users.logout') }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link">Sair</button>
                         </form>
                     </li>
                 @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('users.index') }}">Entrar</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Entrar</a></li>
                 @endif
             </ul>
         </div>
@@ -70,7 +53,7 @@
             text: '{{ session('sucesso') }}',
             icon: 'success',
             confirmButtonText: 'Ok'
-        })
+        });
     </script>
 @endif
 
@@ -81,11 +64,10 @@
             text: '{{ session('erro') }}',
             icon: 'error',
             confirmButtonText: 'Ok'
-        })
+        });
     </script>
 @endif
 
 @stack('scripts')
-
 </body>
 </html>

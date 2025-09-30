@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
-
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CheckinController;
@@ -12,15 +11,13 @@ use App\Models\User;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Aqui é onde você registra as rotas web da aplicação.
-|
 */
 
-// Rota home: lista usuários se ninguém estiver logado, ou tela de check-in se houver usuário na sessão
+// Rota home: lista usuários se ninguém estiver logado, ou check-in se usuário logado
 Route::get('/', function () {
+    $user = Session::get('user');
     $users = User::all();
-    return view('index', compact('users'));
+    return view('index', compact('user', 'users'));
 })->name('home');
 
 // CRUD de grupos
@@ -31,11 +28,11 @@ Route::resource('users', UserController::class);
 
 // LOGIN SIMPLES: cria a sessão para o usuário selecionado
 Route::post('/login-as/{user}', function (User $user) {
-    Session::put('user', $user); // guarda o objeto do usuário na sessão
+    Session::put('user', $user); // guarda objeto na sessão
     return redirect()->route('home')->with('sucesso', "Logado como {$user->name}");
 })->name('users.loginAs');
 
-// LOGOUT SIMPLES: remove a sessão
+// LOGOUT SIMPLES: remove usuário da sessão
 Route::post('/logout', function () {
     Session::forget('user');
     return redirect()->route('home')->with('sucesso', "Sessão encerrada.");
