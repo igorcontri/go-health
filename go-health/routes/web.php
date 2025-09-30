@@ -25,4 +25,6 @@ Route::get('/', function () {
 Route::resource('groups', GroupController::class);
 
 Route::resource('users', UserController::class); //rota pra crud de users
-
+Route::get('/groups/{group}/members', [GroupController::class, 'manageMembers'])->name('groups.members'); //rota pra gerenciamento de membros
+Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.members.add'); // rota pra adicionar membro
+Route::delete('/groups/{group}/members/{user}', [GroupController::class, 'removeMember'])->name('groups.members.remove'); // rota pra remover membro
