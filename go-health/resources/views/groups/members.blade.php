@@ -14,7 +14,7 @@
                     Adicionar Novo Membro
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('groups.members.add', $group->id) }}" method="POST">
+                    <form action="{{ route('groups.members.add', $group->id) }}" method="POST" onsubmit="disableSubmit(this)">
                         @csrf
                         <div class="input-group">
                             <select name="user_id" class="form-select" required>
@@ -69,6 +69,12 @@
 {{-- Adicionamos o script de confirmação no final da página --}}
 @push('scripts')
 <script>
+    function disableSubmit(form) {
+        let button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerText = "Adicionando...";
+    }
+    
     function confirmRemove(button) {
         Swal.fire({
             title: 'Você tem certeza?',

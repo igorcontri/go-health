@@ -3,7 +3,7 @@
 @section('content')
     <h1>Novo Usuário</h1>
 
-    <form action="{{ route('users.store') }}" method="POST">
+    <form action="{{ route('users.store') }}" method="POST" method="POST" onsubmit="disableSubmit(this)">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nome</label>
@@ -36,3 +36,12 @@
         
     </form>
 @endsection
+@push('scripts')
+<script>
+    function disableSubmit(form) {
+        let button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerText = "Salvando...";
+    }
+</script>
+@endpush

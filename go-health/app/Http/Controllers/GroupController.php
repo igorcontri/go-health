@@ -101,20 +101,17 @@ class GroupController extends Controller
            // abort(403, 'Apenas o dono do grupo pode adicionar membros.');
         //}
 
-        // Valida se o user_id foi enviado e se ele existe na tabela users
         $request->validate([
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        // Usa o método attach() para criar o registro na tabela pivô 'group_user'.
-        $group->members()->attach($request->user_id);
+        $group->members()->syncWithoutDetaching([$request->user_id]);
 
-        // Redireciona de volta para a página de gerenciamento com uma mensagem de sucesso.
         return redirect()->route('groups.members', $group->id)
                         ->with('sucesso', 'Membro adicionado com sucesso!');
     }
 
-        public function removeMember(Request $request, Group $group, User $user)
+    public function removeMember(Request $request, Group $group, User $user)
     {
         // ETAPA DE SEGURANÇA (Temporariamente desativada)
         // if (auth()->user()->id !== $group->owner_id) {

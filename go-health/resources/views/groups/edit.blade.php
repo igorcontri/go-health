@@ -3,7 +3,7 @@
 @section('content')
     <h1>Editar Grupo</h1>
 
-    <form action="{{ route('groups.update', $group->id) }}" method="POST">
+    <form action="{{ route('groups.update', $group->id) }}" method="POST" onsubmit="disableSubmit(this)">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -39,3 +39,12 @@
         
     </form>
 @endsection
+@push('scripts')
+<script>
+    function disableSubmit(form) {
+        let button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerText = "Salvando...";
+    }
+</script>
+@endpush
