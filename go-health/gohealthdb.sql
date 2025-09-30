@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `gohealthdb`.`groups` (
   CONSTRAINT `fk_groups_users1`
     FOREIGN KEY (`owner_id`)
     REFERENCES `gohealthdb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -74,12 +74,12 @@ CREATE TABLE IF NOT EXISTS `gohealthdb`.`checkins` (
   CONSTRAINT `fk_checkins_usuarios`
     FOREIGN KEY (`user_id`)
     REFERENCES `gohealthdb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_checkins_groups1`
     FOREIGN KEY (`group_id`)
     REFERENCES `gohealthdb`.`groups` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -103,12 +103,12 @@ CREATE TABLE IF NOT EXISTS `gohealthdb`.`streaks` (
   CONSTRAINT `fk_streaks_users1`
     FOREIGN KEY (`user_id`)
     REFERENCES `gohealthdb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_streaks_groups1`
     FOREIGN KEY (`group_id`)
     REFERENCES `gohealthdb`.`groups` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `gohealthdb`.`group_user` (
   CONSTRAINT `fk_table1_users1`
     FOREIGN KEY (`user_id`)
     REFERENCES `gohealthdb`.`users` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 

@@ -7,7 +7,7 @@
     </div>
 
     <div class="row">
-        {{-- COLUNA PARA ADICIONAR NOVOS MEMBROS (continua igual) --}}
+        {{-- COLUNA PARA ADICIONAR NOVOS MEMBROS --}}
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
