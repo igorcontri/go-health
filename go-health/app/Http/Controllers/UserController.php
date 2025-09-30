@@ -76,14 +76,22 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+
+            // Bloqueia exclusão do usuário logado na sessão
+            $sessionUser = session('user');
+            if ($sessionUser && $sessionUser->id == $user->id) {
+                return redirect()->route('users.index')
+                                ->with('erro', 'Não é possível excluir o usuário logado na sessão.');
+            }
+
             $user->delete();
 
             return redirect()->route("users.index")
-                             ->with("sucesso", "Usuário excluído com sucesso!");
+                            ->with("sucesso", "Usuário excluído com sucesso!");
         } catch(\Exception $e) {
             Log::error("ERRO AO EXCLUIR USUÁRIO: " . $e->getMessage());
             return redirect()->route("users.index")
-                             ->with("erro", "Erro ao excluir usuário!");
+                            ->with("erro", "Erro ao excluir usuário!");
         }
     }
 }

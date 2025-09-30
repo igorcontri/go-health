@@ -8,30 +8,52 @@ use App\Models\Streak;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-
 class CheckinController extends Controller
 {
+    /**
+     * Mostra a tela de check-in do usuário logado
+     */
     public function index()
     {
-        $users = User::all();
-        return view('checkins.index', compact('users'));
+        $userId = session('logged_user_id');
+
+        if (!$userId) {
+            return redirect()
+                ->route('users.index')
+                ->with('erro', 'Você precisa selecionar um usuário para continuar.');
+        }
+
+        $user = User::findOrFail($userId);
+
+        return view('checkins.index', compact('user'));
     }
 
-     public function store(Request $request)
+    /**
+     * Registra o check-in do usuário logado
+     */
+    public function store(Request $request)
     {
-        $user = User::findOrFail($request->user_id);
+        $userId = session('logged_user_id');
+
+        if (!$userId) {
+            return redirect()
+                ->route('users.index')
+                ->with('erro', 'Você precisa estar logado para fazer check-in.');
+        }
+
+        $user = User::findOrFail($userId);
         $today = Carbon::today();
 
-        // só 1 checkin por dia
+        // Garantir apenas 1 check-in por dia
         $existingCheckin = Checkin::where('user_id', $user->id)
             ->whereDate('date', $today)
             ->first();
 
         if ($existingCheckin) {
-            return redirect()->back()->with('erro', 'Usuário já fez check-in hoje.');
+            return redirect()->back()->with('erro', 'Você já fez check-in hoje.');
         }
 
-        // Cria o checkin
+        // Cria o check-in
         Checkin::create([
             'date' => $today,
             'type' => 'botao',
@@ -48,7 +70,7 @@ class CheckinController extends Controller
         if ($streak->last_checkin_date == $yesterday->toDateString()) {
             $streak->current_streak += 1;
         } else {
-            $streak->current_streak = 1; // reinicia
+            $streak->current_streak = 1; // reinicia streak
         }
 
         $streak->longest_streak = max($streak->longest_streak, $streak->current_streak);
@@ -57,5 +79,4 @@ class CheckinController extends Controller
 
         return redirect()->back()->with('sucesso', "Check-in feito para {$user->name}!");
     }
-
 }

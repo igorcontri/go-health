@@ -12,7 +12,7 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
-                <th width="150px">Ações</th>
+                <th width="250px">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -21,13 +21,36 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>
+                    <td class="d-flex gap-1">
+                        {{-- Botão para "logar" como o usuário --}}
+                        @php
+                            $sessionUser = session('user');
+                        @endphp
+                        @if(!$sessionUser || $sessionUser->id !== $user->id)
+                            <form action="{{ route('users.loginAs', $user->id) }}" method="POST" class="d-inline-block">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    Entrar
+                                </button>
+                            </form>
+                        @else
+                            <span class="badge bg-info text-dark">Logado</span>
+                        @endif
+
+                        {{-- Editar --}}
                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
-                        </form>
+
+                        {{-- Excluir --}}
+                        @if(!$sessionUser || $sessionUser->id !== $user->id)
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Tem certeza que deseja excluir?')">
+                                    Excluir
+                                </button>
+                            </form>
+                        @endif
                     </td>
                 </tr>
             @endforeach
