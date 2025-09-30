@@ -3,7 +3,7 @@
 @section('content')
     <h1>Novo Grupo</h1>
 
-    <form action="{{ route('groups.store') }}" method="POST">
+    <form action="{{ route('groups.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nome do Grupo</label>
@@ -24,11 +24,11 @@
         </div>
         <div class="mb-3">
             <label for="group_photo" class="form-label">URL da Foto do Grupo</label>
-            <input type="text" class="form-control" id="group_photo" name="group_photo">
+            <input type="file" class="form-control" id="group_photo" name="group_photo">
         </div>
         <div class="mb-3">
             <label for="group_banner" class="form-label">URL do Banner do Grupo</label>
-            <input type="text" class="form-control" id="group_banner" name="group_banner">
+            <input type="file" class="form-control" id="group_banner" name="group_banner">
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>

@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class GroupController extends Controller
 {
@@ -23,15 +24,40 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            // 1. Cria o grupo e o armazena em uma variável
-            $group = Group::create($request->all());
+        // 1. Validação dos dados (incluindo as imagens)
+        $request->validate([
+            'name' => 'required|string|max:45',
+            'description' => 'nullable|string',
+            'owner_id' => 'required|exists:users,id',
+            'group_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // foto, max 2MB
+            'group_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // banner, max 5MB
+        ]);
 
-            // 2. Usa a relação para adicionar o dono como membro
+        // 2. Pega todos os dados, exceto os arquivos, por enquanto
+        $data = $request->except(['group_photo', 'group_banner']);
+
+        // 3. Processa a foto do grupo, se ela foi enviada
+        if ($request->hasFile('group_photo')) {
+            // Salva o arquivo na pasta 'storage/app/public/group_photos' e pega o caminho
+            $path = $request->file('group_photo')->store('group_photos', 'public');
+            $data['group_photo'] = $path; // Adiciona o caminho ao array de dados
+        }
+
+        // 4. Processa o banner do grupo, se ele foi enviado
+        if ($request->hasFile('group_banner')) {
+            $path = $request->file('group_banner')->store('group_banners', 'public');
+            $data['group_banner'] = $path;
+        }
+
+        try {
+            // 5. Cria o grupo com todos os dados (texto + caminhos das imagens)
+            $group = Group::create($data);
+
+            // 6. Adiciona o dono como membro
             $group->members()->attach($group->owner_id);
 
             return redirect()->route('groups.index')
-                            ->with('sucesso', 'Grupo criado e dono adicionado como membro!');
+                            ->with('sucesso', 'Grupo criado com sucesso!');
         } catch (\Exception $e) {
             Log::error("ERRO AO SALVAR GRUPO: " . $e->getMessage());
             return redirect()->route('groups.index')
@@ -52,8 +78,41 @@ class GroupController extends Controller
 
     public function update(Request $request, Group $group)
     {
+        // 1. Validação
+        $request->validate([
+            'name' => 'required|string|max:45',
+            'description' => 'nullable|string',
+            'owner_id' => 'required|exists:users,id',
+            'group_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'group_banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+        ]);
+
+        // 2. Pega os dados de texto
+        $data = $request->except(['group_photo', 'group_banner']);
+
+        // 3. Processa a nova FOTO, se enviada
+        if ($request->hasFile('group_photo')) {
+            // Apaga a foto antiga para não ocupar espaço
+            if ($group->group_photo) {
+                Storage::disk('public')->delete($group->group_photo);
+            }
+            // Salva a nova foto e atualiza o caminho
+            $path = $request->file('group_photo')->store('group_photos', 'public');
+            $data['group_photo'] = $path;
+        }
+
+        // 4. Processa o novo BANNER, se enviado
+        if ($request->hasFile('group_banner')) {
+            if ($group->group_banner) {
+                Storage::disk('public')->delete($group->group_banner);
+            }
+            $path = $request->file('group_banner')->store('group_banners', 'public');
+            $data['group_banner'] = $path;
+        }
+
         try {
-            $group->update($request->all());
+            // 5. Atualiza o grupo com os novos dados
+            $group->update($data);
             return redirect()->route('groups.index')
                              ->with('sucesso', 'Grupo atualizado com sucesso!');
         } catch (\Exception $e) {
