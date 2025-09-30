@@ -36,7 +36,7 @@ class GroupController extends Controller
 
     public function show(Group $group)
     {
-        // Podemos implementar a página de visualização de um grupo depois, se quiser.
+        // Podemos implementar a página de visualização de um grupo 
     }
 
     public function edit(Group $group)
