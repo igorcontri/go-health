@@ -19,7 +19,7 @@
                     <a class="nav-link" href="/">Início</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Groups</a>
+                    <a class="nav-link" href="{{ route('groups.index') }}">Groups</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('users.index') }}">Users</a>
@@ -30,21 +30,35 @@
 </nav>
 
 <main class="container py-4">
-    @if(session('sucesso'))
-        <div class="alert alert-success">
-            {{ session('sucesso') }}
-        </div>
-    @endif
-
-    @if(session('erro'))
-        <div class="alert alert-danger">
-            {{ session('erro') }}
-        </div>
-    @endif
-
     @yield('content')
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{{-- Adicionando a biblioteca SweetAlert2 --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Lógica para disparar o SweetAlert --}}
+@if(session('sucesso'))
+    <script>
+        Swal.fire({
+            title: 'Sucesso!',
+            text: '{{ session('sucesso') }}',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+    </script>
+@endif
+
+@if(session('erro'))
+    <script>
+        Swal.fire({
+            title: 'Erro!',
+            text: '{{ session('erro') }}',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })
+    </script>
+@endif
+
 </body>
 </html>
