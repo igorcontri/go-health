@@ -3,7 +3,7 @@
 @section('content')
     <h1>Editar Grupo</h1>
 
-    <form action="{{ route('groups.update', $group->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('groups.update', $group->id) }}" method="POST" enctype="multipart/form-data" onsubmit="disableSubmit(this)">
         @csrf
         @method('PUT')
         
@@ -64,3 +64,12 @@
         <button type="submit" class="btn btn-primary">Atualizar</button>
     </form>
 @endsection
+@push('scripts')
+<script>
+    function disableSubmit(form) {
+        let button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerText = "Salvando...";
+    }
+</script>
+@endpush
