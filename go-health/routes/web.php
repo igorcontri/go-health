@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\GroupController;
+
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -18,4 +21,8 @@ use App\Http\Controllers\GroupController;
 Route::get('/', function () {
     return view('index');
 });
+
 Route::resource('groups', GroupController::class);
+
+Route::resource('users', UserController::class); //rota pra crud de users
+
