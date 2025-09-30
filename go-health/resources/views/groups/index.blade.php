@@ -24,10 +24,12 @@
                     <td>
                         <a href="{{ route('groups.members', $group->id) }}" class="btn btn-primary btn-sm">Membros</a>
                         <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('groups.destroy', $group->id) }}" method="POST" class="d-inline">
+                        <form action="{{ route('groups.destroy', $group->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Excluir</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este grupo?')">
+                                Excluir
+                            </button>
                         </form>
                     </td>
                 </tr>
