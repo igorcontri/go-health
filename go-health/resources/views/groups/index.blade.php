@@ -12,7 +12,7 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Dono do Grupo</th>
-                <th width="150px">Ações</th>
+                <th width="220px">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +22,7 @@
                     <td>{{ $group->name }}</td>
                     <td>{{ $group->owner->name ?? 'Usuário não encontrado' }}</td>
                     <td>
+                        <a href="{{ route('groups.members', $group->id) }}" class="btn btn-primary btn-sm">Membros</a>
                         <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('groups.destroy', $group->id) }}" method="POST" class="d-inline">
                             @csrf
