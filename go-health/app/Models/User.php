@@ -33,6 +33,16 @@ class User extends Authenticatable
         'height' => 'decimal:2',
     ];
 
+    public function checkins()
+    {
+        return $this->hasMany(Checkin::class);
+    }
+
+    public function streaks()
+    {
+        return $this->hasMany(Streak::class);
+    }
+
     /**
      * Criptografa a senha automaticamente ao salvar.
      */
@@ -40,4 +50,6 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
+
+
 }

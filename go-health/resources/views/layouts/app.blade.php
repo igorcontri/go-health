@@ -24,6 +24,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('users.index') }}">Users</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('checkins.index') }}">Check-in</a>
+                </li>
             </ul>
         </div>
     </div>
