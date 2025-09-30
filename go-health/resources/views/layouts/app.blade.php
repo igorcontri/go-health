@@ -37,10 +37,8 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-{{-- Adicionando a biblioteca SweetAlert2 --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{{-- Lógica para disparar o SweetAlert --}}
 @if(session('sucesso'))
     <script>
         Swal.fire({
@@ -62,6 +60,8 @@
         })
     </script>
 @endif
+
+@stack('scripts')
 
 </body>
 </html>

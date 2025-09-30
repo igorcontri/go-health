@@ -32,3 +32,7 @@ Route::resource('checkins', CheckinController::class)->only(['index', 'store']);
 // Route::get('/checkins', [CheckinController::class, 'index'])->name('checkins.index');
 // Route::post('/checkins', [CheckinController::class, 'store'])->name('checkins.store');
 
+Route::get('/groups/{group}/members', [GroupController::class, 'manageMembers'])->name('groups.members'); //rota pra gerenciamento de membros
+Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.members.add'); // rota pra adicionar membro
+Route::delete('/groups/{group}/members/{user}', [GroupController::class, 'removeMember'])->name('groups.members.remove'); // rota pra remover membro
+
